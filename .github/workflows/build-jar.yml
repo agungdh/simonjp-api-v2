@@ -1,4 +1,4 @@
-name: Build Fat JAR
+name: Build JAR
 
 on:
   push:
@@ -22,11 +22,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build uber-jar
-        run: ./gradlew build -Dquarkus.package.jar.type=uber-jar
+      - name: Build JAR
+        run: ./gradlew build
 
-      - name: Upload fat jar
+      - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
-          name: simonjp-api-v2-fatjar
-          path: build/*-runner.jar
+          name: simonjp-api-v2-jar
+          path: build/quarkus-app/
