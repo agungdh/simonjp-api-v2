@@ -1,0 +1,9 @@
+quarkus:
+  # Swagger UI available outside dev mode (at /q/swagger-ui)
+  swagger-ui:
+    always-include: true
+
+  # Virtual threads are enabled by default on Java 21+ (methods annotated with
+  # @RunOnVirtualThread run on virtual threads). Set to false to force worker threads.
+  virtual-threads:
+    enabled: true

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Minimal Quarkus REST API (Gradle Kotlin DSL). Single resource `GreetingResource` (`id.my.agungdh`) at `GET /hello`. Package root is `id.my.agungdh`.
+Quarkus REST API (Gradle Kotlin DSL). Package root is `id.my.agungdh`. REST resources: `GreetingResource` (`GET /hello`) and `ProductResource` (`/products` CRUD). Config lives in `application.yml` (not `.properties`).
 
 ## Commands
 
@@ -17,8 +17,10 @@ Use the Gradle wrapper (`./gradlew`) — this is a Gradle project, not Maven.
 
 - **Java 25 required**: `build.gradle.kts` sets `sourceCompatibility = JavaVersion.VERSION_25`.
 - **REST stack is `quarkus-rest` (RESTEasy Reactive).** It is incompatible with `quarkus-resteasy` and anything that depends on it — do not add them together.
-- **Quarkus/Gradle versions live in `gradle.properties`** (`quarkusPluginVersion`, `quarkusPlatformVersion`), not in `build.gradle.kts`; the build script reads them via `by project`.
+- **Quarkus/Gradle versions live in `gradle.properties`** (`quarkusPluginVersion`, `quarkusPlatformVersion`, `mapstructVersion`), not in `build.gradle.kts`; the build script reads them via `by project`.
 - **Native integration tests are not run by `./gradlew test`.** `src/native-test/` holds `@QuarkusIntegrationTest` (`GreetingResourceIT` extends the unit test) and runs via `./gradlew testNative`, which requires a native image built first. There is no `src/integrationTest/` source set.
+- **Config is `application.yml`** (YAML), not `application.properties`. Keep it in `src/main/resources/`. YAML requires the `quarkus-config-yaml` extension (already added to `build.gradle.kts`).
+- **Virtual threads: annotate REST endpoints with `@RunOnVirtualThread`** (`io.smallrye.common.annotation.RunOnVirtualThread`). Quarkus has no global "run everything on virtual threads" switch. For CPU-heavy endpoints (future), omit the annotation so they run on worker threads instead.
 - `build/` and `target/` are gitignored build/dev artifacts.
 
 ## Layout
