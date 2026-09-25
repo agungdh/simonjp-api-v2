@@ -1,4 +1,4 @@
-package id.my.agungdh;
+package id.my.agungdh.resource;
 
 import id.my.agungdh.dto.ProductRequest;
 import id.my.agungdh.dto.ProductResponse;

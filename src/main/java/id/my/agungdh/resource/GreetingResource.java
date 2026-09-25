@@ -1,4 +1,4 @@
-package id.my.agungdh;
+package id.my.agungdh.resource;
 
 import io.smallrye.common.annotation.RunOnVirtualThread;
 import jakarta.ws.rs.GET;
