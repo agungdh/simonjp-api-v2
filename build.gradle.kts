@@ -18,6 +18,7 @@ dependencies {
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-jackson")
     implementation("io.quarkus:quarkus-arc")
+    implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("org.mapstruct:mapstruct:${mapstructVersion}")
     annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     testImplementation("io.quarkus:quarkus-junit")

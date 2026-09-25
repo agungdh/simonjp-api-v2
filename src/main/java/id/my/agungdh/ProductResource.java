@@ -19,6 +19,9 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.net.URI;
 import java.util.List;
@@ -26,6 +29,7 @@ import java.util.List;
 @Path("/products")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "products", description = "Product CRUD operations")
 public class ProductResource {
 
     @Inject
@@ -35,6 +39,7 @@ public class ProductResource {
     ProductMapper mapper;
 
     @GET
+    @Operation(summary = "List all products")
     public List<ProductResponse> list() {
         return repository.findAll().stream()
                 .map(mapper::toResponse)
@@ -43,6 +48,8 @@ public class ProductResource {
 
     @GET
     @Path("/{id}")
+    @Operation(summary = "Get a product by id")
+    @APIResponse(responseCode = "404", description = "Product not found")
     public ProductResponse get(@PathParam("id") Long id) {
         Product product = repository.findById(id)
                 .orElseThrow(NotFoundException::new);
@@ -50,6 +57,8 @@ public class ProductResource {
     }
 
     @POST
+    @Operation(summary = "Create a product")
+    @APIResponse(responseCode = "201", description = "Product created")
     public Response create(ProductRequest request, @Context UriInfo uriInfo) {
         Product product = repository.save(mapper.toEntity(request));
         ProductResponse response = mapper.toResponse(product);
@@ -63,6 +72,8 @@ public class ProductResource {
 
     @PUT
     @Path("/{id}")
+    @Operation(summary = "Update a product")
+    @APIResponse(responseCode = "404", description = "Product not found")
     public ProductResponse update(@PathParam("id") Long id, ProductRequest request) {
         repository.findById(id)
                 .orElseThrow(NotFoundException::new);
@@ -76,6 +87,9 @@ public class ProductResource {
 
     @DELETE
     @Path("/{id}")
+    @Operation(summary = "Delete a product")
+    @APIResponse(responseCode = "204", description = "Product deleted")
+    @APIResponse(responseCode = "404", description = "Product not found")
     public Response delete(@PathParam("id") Long id) {
         if (!repository.delete(id)) {
             throw new NotFoundException();
