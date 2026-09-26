@@ -1,12 +1,10 @@
 package id.my.agungdh.dto;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record PegawaiResponse(
-        Long id,
+        UUID uuid,
         String nip,
         String nama,
-        String jabatan,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        String jabatan
 ) {}

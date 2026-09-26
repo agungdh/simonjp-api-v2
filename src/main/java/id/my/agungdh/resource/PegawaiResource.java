@@ -15,7 +15,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Path("/pegawai")
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,16 +35,17 @@ public class PegawaiResource {
     @GET
     @Operation(summary = "List all pegawai")
     public List<PegawaiResponse> list() {
-        return repository.listAll().stream()
+        return repository.find("deletedAt IS NULL").list()
+                .stream()
                 .map(mapper::toResponse)
                 .toList();
     }
 
-    @GET @Path("/{id}")
-    @Operation(summary = "Get a pegawai by id")
+    @GET @Path("/{uuid}")
+    @Operation(summary = "Get a pegawai by uuid")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
-    public PegawaiResponse get(@PathParam("id") Long id) {
-        Pegawai pegawai = repository.findByIdOptional(id)
+    public PegawaiResponse get(@PathParam("uuid") UUID uuid) {
+        Pegawai pegawai = repository.findByUuid(uuid)
                 .orElseThrow(NotFoundException::new);
         return mapper.toResponse(pegawai);
     }
@@ -56,16 +59,16 @@ public class PegawaiResource {
         repository.persist(pegawai);
         PegawaiResponse response = mapper.toResponse(pegawai);
         URI location = uriInfo.getAbsolutePathBuilder()
-                .path(pegawai.id.toString()).build();
+                .path(pegawai.getUuid().toString()).build();
         return Response.created(location).entity(response).build();
     }
 
-    @PUT @Path("/{id}")
+    @PUT @Path("/{uuid}")
     @Transactional
     @Operation(summary = "Update a pegawai")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
-    public PegawaiResponse update(@PathParam("id") Long id, PegawaiRequest request) {
-        Pegawai pegawai = repository.findByIdOptional(id)
+    public PegawaiResponse update(@PathParam("uuid") UUID uuid, PegawaiRequest request) {
+        Pegawai pegawai = repository.findByUuid(uuid)
                 .orElseThrow(NotFoundException::new);
         pegawai.nip = request.nip();
         pegawai.nama = request.nama();
@@ -73,13 +76,15 @@ public class PegawaiResource {
         return mapper.toResponse(pegawai);
     }
 
-    @DELETE @Path("/{id}")
+    @DELETE @Path("/{uuid}")
     @Transactional
     @Operation(summary = "Delete a pegawai")
     @APIResponse(responseCode = "204", description = "Pegawai deleted")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
-    public Response delete(@PathParam("id") Long id) {
-        if (!repository.deleteById(id)) throw new NotFoundException();
+    public Response delete(@PathParam("uuid") UUID uuid) {
+        Pegawai pegawai = repository.findByUuid(uuid)
+                .orElseThrow(NotFoundException::new);
+        pegawai.deletedAt = LocalDateTime.now();
         return Response.noContent().build();
     }
 }
