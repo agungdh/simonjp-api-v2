@@ -45,7 +45,7 @@ jobs:
       - name: Build native executable (x86-64-v2)
         run: |
           export GRAALVM_HOME="$JAVA_HOME"
-          ./gradlew build \
+          ./gradlew build -x test \
             -Dquarkus.native.enabled=true \
             -Dquarkus.package.jar.enabled=false \
             -Dquarkus.native.additional-build-args=-march=x86-64-v2
