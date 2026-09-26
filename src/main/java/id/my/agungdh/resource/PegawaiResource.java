@@ -4,10 +4,9 @@ import id.my.agungdh.dto.PegawaiRequest;
 import id.my.agungdh.dto.PegawaiResponse;
 import id.my.agungdh.entity.Pegawai;
 import id.my.agungdh.mapper.PegawaiMapper;
-import id.my.agungdh.repository.PegawaiRepository;
+import id.my.agungdh.service.PegawaiService;
 import io.smallrye.common.annotation.RunOnVirtualThread;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -15,7 +14,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +25,7 @@ import java.util.UUID;
 public class PegawaiResource {
 
     @Inject
-    PegawaiRepository repository;
+    PegawaiService service;
 
     @Inject
     PegawaiMapper mapper;
@@ -35,8 +33,7 @@ public class PegawaiResource {
     @GET
     @Operation(summary = "List all pegawai")
     public List<PegawaiResponse> list() {
-        return repository.find("deletedAt IS NULL").list()
-                .stream()
+        return service.listAll().stream()
                 .map(mapper::toResponse)
                 .toList();
     }
@@ -45,18 +42,16 @@ public class PegawaiResource {
     @Operation(summary = "Get a pegawai by uuid")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
     public PegawaiResponse get(@PathParam("uuid") UUID uuid) {
-        Pegawai pegawai = repository.findByUuid(uuid)
+        Pegawai pegawai = service.findByUuid(uuid)
                 .orElseThrow(NotFoundException::new);
         return mapper.toResponse(pegawai);
     }
 
     @POST
-    @Transactional
     @Operation(summary = "Create a pegawai")
     @APIResponse(responseCode = "201", description = "Pegawai created")
     public Response create(PegawaiRequest request, @Context UriInfo uriInfo) {
-        Pegawai pegawai = mapper.toEntity(request);
-        repository.persist(pegawai);
+        Pegawai pegawai = service.create(mapper.toEntity(request));
         PegawaiResponse response = mapper.toResponse(pegawai);
         URI location = uriInfo.getAbsolutePathBuilder()
                 .path(pegawai.getUuid().toString()).build();
@@ -64,27 +59,19 @@ public class PegawaiResource {
     }
 
     @PUT @Path("/{uuid}")
-    @Transactional
     @Operation(summary = "Update a pegawai")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
     public PegawaiResponse update(@PathParam("uuid") UUID uuid, PegawaiRequest request) {
-        Pegawai pegawai = repository.findByUuid(uuid)
-                .orElseThrow(NotFoundException::new);
-        pegawai.nip = request.nip();
-        pegawai.nama = request.nama();
-        pegawai.jabatan = request.jabatan();
+        Pegawai pegawai = service.update(uuid, mapper.toEntity(request));
         return mapper.toResponse(pegawai);
     }
 
     @DELETE @Path("/{uuid}")
-    @Transactional
     @Operation(summary = "Delete a pegawai")
     @APIResponse(responseCode = "204", description = "Pegawai deleted")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
     public Response delete(@PathParam("uuid") UUID uuid) {
-        Pegawai pegawai = repository.findByUuid(uuid)
-                .orElseThrow(NotFoundException::new);
-        pegawai.deletedAt = LocalDateTime.now();
+        service.delete(uuid);
         return Response.noContent().build();
     }
 }

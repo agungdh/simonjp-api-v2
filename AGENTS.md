@@ -37,6 +37,7 @@ Use the Gradle wrapper (`./gradlew`) — this is a Gradle project, not Maven.
 - `src/main/java/id/my/agungdh/dto/` — request/response records
 - `src/main/java/id/my/agungdh/mapper/` — MapStruct mappers (`componentModel = "cdi"`)
 - `src/main/java/id/my/agungdh/repository/` — data access (Panache, `PanacheRepositoryBase`)
+- `src/main/java/id/my/agungdh/service/` — business logic (CDI beans, `@Transactional`)
 - `src/main/resources/db/migration/` — Flyway SQL migrations
 - `src/test/java/` — `@QuarkusTest` unit tests (run in JVM mode)
 - `src/native-test/java/` — `@QuarkusIntegrationTest` tests (run against packaged/native app)
