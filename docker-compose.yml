@@ -16,20 +16,6 @@ services:
       timeout: 5s
       retries: 5
 
-  valkey:
-    image: valkey/valkey:9.1
-    restart: always
-    command: ["valkey-server", "--requirepass", "admin"]
-    ports:
-      - "127.0.0.1:6379:6379"
-    volumes:
-      - valkey_data:/data
-    healthcheck:
-      test: ["CMD", "valkey-cli", "-a", "admin", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   minio:
     image: pgsty/silo:latest
     restart: always
@@ -64,22 +50,6 @@ services:
       timeout: 5s
       retries: 5
 
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    restart: always
-    ports:
-      - "127.0.0.1:8084:8081"
-    environment:
-      REDIS_HOST: valkey
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: admin
-      HTTP_USER: admin
-      HTTP_PASSWORD: admin
-    depends_on:
-      valkey:
-        condition: service_healthy
-
 volumes:
   postgres_data:
-  valkey_data:
   minio_data:
