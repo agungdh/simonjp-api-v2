@@ -7,3 +7,20 @@ quarkus:
   # @RunOnVirtualThread run on virtual threads). Set to false to force worker threads.
   virtual-threads:
     enabled: true
+
+  # Datasource
+  datasource:
+    db-kind: postgresql
+    username: admin
+    password: admin
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/crud
+
+  # Hibernate ORM
+  hibernate-orm:
+    database:
+      generation: none
+
+  # Flyway
+  flyway:
+    migrate-at-start: true
