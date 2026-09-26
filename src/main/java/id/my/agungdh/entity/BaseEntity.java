@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -21,19 +21,19 @@ public abstract class BaseEntity extends PanacheEntityBase {
     public UUID uuid;
 
     @Column(name = "created_at", updatable = false)
-    public LocalDateTime createdAt;
+    public OffsetDateTime createdAt;
 
     @Column(name = "created_by", updatable = false)
     public Long createdBy;
 
     @Column(name = "updated_at")
-    public LocalDateTime updatedAt;
+    public OffsetDateTime updatedAt;
 
     @Column(name = "updated_by")
     public Long updatedBy;
 
     @Column(name = "deleted_at")
-    public LocalDateTime deletedAt;
+    public OffsetDateTime deletedAt;
 
     @Column(name = "deleted_by", updatable = false)
     public Long deletedBy;
@@ -41,12 +41,12 @@ public abstract class BaseEntity extends PanacheEntityBase {
     @PrePersist
     public void prePersist() {
         if (uuid == null) uuid = UUID.randomUUID();
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        createdAt = OffsetDateTime.now();
+        updatedAt = OffsetDateTime.now();
     }
 
     @PreUpdate
     public void preUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = OffsetDateTime.now();
     }
 }

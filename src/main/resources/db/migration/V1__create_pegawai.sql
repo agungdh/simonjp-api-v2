@@ -4,11 +4,11 @@ CREATE TABLE pegawai (
     nip        VARCHAR(20)  NOT NULL,
     nama       VARCHAR(100) NOT NULL,
     jabatan    VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP    NULL,
+    created_at TIMESTAMPTZ  NULL,
     created_by BIGINT       NULL,
-    updated_at TIMESTAMP    NULL,
+    updated_at TIMESTAMPTZ  NULL,
     updated_by BIGINT       NULL,
-    deleted_at TIMESTAMP    NULL,
+    deleted_at TIMESTAMPTZ  NULL,
     deleted_by BIGINT       NULL
 );
 

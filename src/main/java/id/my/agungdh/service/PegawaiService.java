@@ -6,7 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,6 +45,6 @@ public class PegawaiService {
     public void delete(UUID uuid) {
         Pegawai pegawai = repository.findByUuid(uuid)
                 .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
-        pegawai.deletedAt = LocalDateTime.now();
+        pegawai.deletedAt = OffsetDateTime.now();
     }
 }
