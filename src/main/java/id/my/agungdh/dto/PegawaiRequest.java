@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 public record PegawaiRequest(
         @NotBlank(message = "NIP harus diisi")
         @Pattern(regexp = "\\d{18}", message = "NIP harus 18 digit angka")
+        @Unique(entity = "id.my.agungdh.entity.Pegawai", field = "nip", message = "NIP sudah ada")
         String nip,
 
         @NotBlank(message = "Nama harus diisi")
