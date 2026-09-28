@@ -24,3 +24,9 @@ quarkus:
   # Flyway
   flyway:
     migrate-at-start: true
+
+  # Disable validation failure logging
+  log:
+    category:
+      "io.quarkus.hibernate.validator":
+        level: OFF

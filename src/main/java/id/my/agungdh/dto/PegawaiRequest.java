@@ -1,7 +1,19 @@
 package id.my.agungdh.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public record PegawaiRequest(
+        @NotBlank(message = "NIP harus diisi")
+        @Pattern(regexp = "\\d{18}", message = "NIP harus 18 digit angka")
         String nip,
+
+        @NotBlank(message = "Nama harus diisi")
+        @Size(min = 2, max = 255, message = "Nama harus 2-255 karakter")
         String nama,
+
+        @NotBlank(message = "Jabatan harus diisi")
+        @Size(min = 2, max = 255, message = "Jabatan harus 2-255 karakter")
         String jabatan
 ) {}

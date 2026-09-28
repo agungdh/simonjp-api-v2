@@ -7,6 +7,7 @@ import id.my.agungdh.mapper.PegawaiMapper;
 import id.my.agungdh.service.PegawaiService;
 import io.smallrye.common.annotation.RunOnVirtualThread;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -50,7 +51,7 @@ public class PegawaiResource {
     @POST
     @Operation(summary = "Create a pegawai")
     @APIResponse(responseCode = "201", description = "Pegawai created")
-    public Response create(PegawaiRequest request, @Context UriInfo uriInfo) {
+    public Response create(@Valid PegawaiRequest request, @Context UriInfo uriInfo) {
         Pegawai pegawai = service.create(mapper.toEntity(request));
         PegawaiResponse response = mapper.toResponse(pegawai);
         URI location = uriInfo.getAbsolutePathBuilder()
@@ -61,7 +62,7 @@ public class PegawaiResource {
     @PUT @Path("/{uuid}")
     @Operation(summary = "Update a pegawai")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
-    public PegawaiResponse update(@PathParam("uuid") UUID uuid, PegawaiRequest request) {
+    public PegawaiResponse update(@PathParam("uuid") UUID uuid, @Valid PegawaiRequest request) {
         Pegawai pegawai = service.update(uuid, mapper.toEntity(request));
         return mapper.toResponse(pegawai);
     }
