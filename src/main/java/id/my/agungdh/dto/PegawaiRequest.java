@@ -1,5 +1,6 @@
 package id.my.agungdh.dto;
 
+import id.my.agungdh.validation.Unique;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

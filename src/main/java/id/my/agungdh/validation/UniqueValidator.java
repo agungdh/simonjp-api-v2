@@ -1,4 +1,4 @@
-package id.my.agungdh.dto;
+package id.my.agungdh.validation;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
