@@ -4,6 +4,7 @@ import id.my.agungdh.entity.Pegawai;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,6 +16,13 @@ public class PegawaiRepository implements PanacheRepositoryBase<Pegawai, Long> {
     }
 
     public Optional<Pegawai> findByNip(String nip) {
-        return find("nip = ?1 AND deletedAt IS NULL", nip).firstResultOptional();
+        return find("nip = ?1", nip).firstResultOptional();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Pegawai> findAllIncludingDeleted() {
+        return getEntityManager()
+                .createNativeQuery("SELECT * FROM pegawai", Pegawai.class)
+                .getResultList();
     }
 }
