@@ -29,4 +29,4 @@ quarkus:
   log:
     category:
       "io.quarkus.hibernate.validator":
-        level: OFF
+        level: "OFF"

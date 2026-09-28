@@ -16,7 +16,6 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
     @Override
     public Response toResponse(ConstraintViolationException exception) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("status", 422);
         body.put("error", "Validation Failed");
 
         Map<String, String> errors = exception.getConstraintViolations().stream()
