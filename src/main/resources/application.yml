@@ -24,6 +24,9 @@ quarkus:
   # Flyway
   flyway:
     migrate-at-start: true
+    locations:
+      - classpath:db/migration
+      - classpath:id/my/agungdh/migration
 
   # Disable validation failure logging
   log:

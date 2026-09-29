@@ -6,6 +6,6 @@ CREATE TABLE sessions (
     created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_session_token USING hash (token);
+CREATE INDEX idx_session_token ON sessions USING hash (token);
 
 CREATE INDEX idx_session_user_id ON sessions (user_id);
