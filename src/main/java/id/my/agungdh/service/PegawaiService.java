@@ -1,7 +1,10 @@
 package id.my.agungdh.service;
 
+import id.my.agungdh.dto.PegawaiRequest;
 import id.my.agungdh.entity.Pegawai;
+import id.my.agungdh.entity.User;
 import id.my.agungdh.repository.PegawaiRepository;
+import id.my.agungdh.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -17,6 +20,9 @@ public class PegawaiService {
     @Inject
     PegawaiRepository repository;
 
+    @Inject
+    UserRepository userRepository;
+
     public List<Pegawai> listAll() {
         return repository.find("deletedAt IS NULL").list();
     }
@@ -26,18 +32,25 @@ public class PegawaiService {
     }
 
     @Transactional
-    public Pegawai create(Pegawai pegawai) {
+    public Pegawai create(Pegawai pegawai, PegawaiRequest request) {
         repository.persist(pegawai);
+        User user = new User();
+        user.username = pegawai.nip;
+        user.password = request.password();
+        userRepository.persist(user);
         return pegawai;
     }
 
     @Transactional
-    public Pegawai update(UUID uuid, Pegawai updated) {
+    public Pegawai update(UUID uuid, Pegawai pegawai, PegawaiRequest request) {
         Pegawai existing = repository.findByUuid(uuid)
                 .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
-        existing.nip = updated.nip;
-        existing.nama = updated.nama;
-        existing.jabatan = updated.jabatan;
+        existing.nip = pegawai.nip;
+        existing.nama = pegawai.nama;
+        existing.jabatan = pegawai.jabatan;
+        User user = userRepository.findByUsername(existing.nip)
+                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
+        user.password = request.password();
         return existing;
     }
 
@@ -46,5 +59,8 @@ public class PegawaiService {
         Pegawai pegawai = repository.findByUuid(uuid)
                 .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
         pegawai.deletedAt = OffsetDateTime.now();
+        User user = userRepository.findByUsername(pegawai.nip)
+                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
+        user.deletedAt = OffsetDateTime.now();
     }
 }

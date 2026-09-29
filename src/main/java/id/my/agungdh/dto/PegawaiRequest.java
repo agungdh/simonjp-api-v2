@@ -17,5 +17,8 @@ public record PegawaiRequest(
 
         @NotBlank(message = "Jabatan harus diisi")
         @Size(min = 2, max = 255, message = "Jabatan harus 2-255 karakter")
-        String jabatan
+        String jabatan,
+
+        @Size(max = 255, message = "Password maksimal 255 karakter")
+        String password
 ) {}

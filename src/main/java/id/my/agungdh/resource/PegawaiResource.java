@@ -52,7 +52,7 @@ public class PegawaiResource {
     @Operation(summary = "Create a pegawai")
     @APIResponse(responseCode = "201", description = "Pegawai created")
     public Response create(@Valid PegawaiRequest request, @Context UriInfo uriInfo) {
-        Pegawai pegawai = service.create(mapper.toEntity(request));
+        Pegawai pegawai = service.create(mapper.toEntity(request), request);
         PegawaiResponse response = mapper.toResponse(pegawai);
         URI location = uriInfo.getAbsolutePathBuilder()
                 .path(pegawai.getUuid().toString()).build();
@@ -63,7 +63,7 @@ public class PegawaiResource {
     @Operation(summary = "Update a pegawai")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
     public PegawaiResponse update(@PathParam("uuid") UUID uuid, @Valid PegawaiRequest request) {
-        Pegawai pegawai = service.update(uuid, mapper.toEntity(request));
+        Pegawai pegawai = service.update(uuid, mapper.toEntity(request), request);
         return mapper.toResponse(pegawai);
     }
 
