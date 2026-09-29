@@ -53,18 +53,18 @@ public class PegawaiResource {
     @APIResponse(responseCode = "201", description = "Pegawai created")
     public Response create(@Valid PegawaiRequest request, @Context UriInfo uriInfo) {
         Pegawai pegawai = service.create(mapper.toEntity(request), request);
-        PegawaiResponse response = mapper.toResponse(pegawai);
         URI location = uriInfo.getAbsolutePathBuilder()
                 .path(pegawai.getUuid().toString()).build();
-        return Response.created(location).entity(response).build();
+        return Response.created(location).build();
     }
 
     @PUT @Path("/{uuid}")
     @Operation(summary = "Update a pegawai")
+    @APIResponse(responseCode = "204", description = "Pegawai updated")
     @APIResponse(responseCode = "404", description = "Pegawai not found")
-    public PegawaiResponse update(@PathParam("uuid") UUID uuid, @Valid PegawaiRequest request) {
-        Pegawai pegawai = service.update(uuid, mapper.toEntity(request), request);
-        return mapper.toResponse(pegawai);
+    public Response update(@PathParam("uuid") UUID uuid, @Valid PegawaiRequest request) {
+        service.update(uuid, mapper.toEntity(request), request);
+        return Response.noContent().build();
     }
 
     @DELETE @Path("/{uuid}")

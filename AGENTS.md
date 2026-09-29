@@ -66,6 +66,7 @@ Self-documenting help targets. Default `make` shows available commands.
 ## Architecture Patterns
 
 - **Layered architecture**: entity → DTO (records) → mapper → repository → service → resource. Resource only handles HTTP concerns.
+- **CUD endpoints return no body.** Create returns `201` with `Location` header. Update returns `204 No Content`. Delete returns `204 No Content`. Only Read (GET) endpoints return a response body.
 - **Service methods accept the full request DTO** as a parameter, not individual fields.
 - **1:1 related entities**: primary entity's CRUD manages the secondary entity's lifecycle automatically in a single transaction. No separate API for the secondary entity.
 - **Validation**: custom annotations in `validation` package, exception mappers in `exception` package. Validation errors return 422 with `Map<String, List<String>>` errors (not logged).
