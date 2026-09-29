@@ -1,4 +1,4 @@
-CREATE TABLE pegawai (
+CREATE TABLE pegawais (
     id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid       UUID         NOT NULL DEFAULT gen_random_uuid(),
     nip        VARCHAR(20)  NOT NULL,
@@ -12,6 +12,6 @@ CREATE TABLE pegawai (
     deleted_by BIGINT       NULL
 );
 
-CREATE INDEX idx_pegawai_uuid_hash ON pegawai USING hash (uuid);
+CREATE INDEX idx_pegawai_uuid_hash ON pegawais USING hash (uuid);
 
-CREATE UNIQUE INDEX idx_pegawai_nip ON pegawai (nip) WHERE deleted_at IS NULL;
+CREATE UNIQUE INDEX idx_pegawai_nip ON pegawais (nip) WHERE deleted_at IS NULL;

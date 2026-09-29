@@ -1,4 +1,4 @@
-CREATE UNIQUE INDEX idx_pegawai_nip_full ON pegawai (nip);
+CREATE UNIQUE INDEX idx_pegawai_nip_full ON pegawais (nip);
 
 CREATE TABLE users (
     id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -13,7 +13,7 @@ CREATE TABLE users (
     deleted_by BIGINT       NULL,
 
     CONSTRAINT fk_user_username FOREIGN KEY (username)
-        REFERENCES pegawai (nip)
+        REFERENCES pegawais (nip)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 );

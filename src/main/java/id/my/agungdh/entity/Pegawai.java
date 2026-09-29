@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "pegawai")
+@Table(name = "pegawais")
 public class Pegawai extends BaseEntity {
 
     @Column(nullable = false, length = 20)
