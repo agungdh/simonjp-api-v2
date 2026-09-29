@@ -1,6 +1,7 @@
 package id.my.agungdh.repository;
 
 import id.my.agungdh.config.SoftDelete;
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @SoftDelete
 @Interceptor
-@Interceptor.Priority(Interceptor.Priority.APPLICATION)
+@Priority(Interceptor.Priority.APPLICATION)
 public class SoftDeleteInterceptor {
 
     @Inject
