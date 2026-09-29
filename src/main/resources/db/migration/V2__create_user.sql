@@ -19,6 +19,6 @@ CREATE TABLE users (
 
 CREATE INDEX idx_user_uuid_hash ON users USING hash (uuid);
 
-CREATE INDEX idx_user_username ON users (username);
+CREATE INDEX idx_user_pegawai_id ON users (pegawai_id);
 
 CREATE UNIQUE INDEX idx_user_username_unique ON users (username) WHERE deleted_at IS NULL;
