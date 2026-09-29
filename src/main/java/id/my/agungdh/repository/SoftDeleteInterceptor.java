@@ -7,23 +7,26 @@ import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
 
-import java.util.Set;
-
 @SoftDelete
 @Interceptor
 @Priority(Interceptor.Priority.APPLICATION)
 public class SoftDeleteInterceptor {
 
     @Inject
-    Set<SoftDeletableRepository<?, ?>> repositories;
+    PegawaiRepository pegawaiRepository;
+
+    @Inject
+    UserRepository userRepository;
 
     @AroundInvoke
     public Object intercept(InvocationContext ctx) throws Exception {
-        repositories.forEach(SoftDeletableRepository::enableDeletedFilter);
+        pegawaiRepository.enableDeletedFilter();
+        userRepository.enableDeletedFilter();
         try {
             return ctx.proceed();
         } finally {
-            repositories.forEach(SoftDeletableRepository::disableDeletedFilter);
+            pegawaiRepository.disableDeletedFilter();
+            userRepository.disableDeletedFilter();
         }
     }
 }
