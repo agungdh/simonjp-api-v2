@@ -16,4 +16,8 @@ public class UserRepository implements PanacheRepositoryBase<User, Long> {
     public Optional<User> findByPegawaiId(Long pegawaiId) {
         return find("pegawaiId = ?1", pegawaiId).firstResultOptional();
     }
+
+    public Optional<User> findByUsername(String username) {
+        return find("username", username).firstResultOptional();
+    }
 }
