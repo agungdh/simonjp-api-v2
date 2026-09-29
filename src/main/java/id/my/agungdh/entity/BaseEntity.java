@@ -4,9 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
-import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -14,8 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @MappedSuperclass
-@FilterDef(name = "deletedFilter", parameters = @ParamDef(name = "deleted", type = Boolean.class))
-@Filter(name = "deletedFilter", condition = "deleted_at IS NULL = :deleted")
+@SQLRestriction("deleted_at IS NULL")
 public abstract class BaseEntity extends PanacheEntityBase {
 
     @Id
