@@ -1,4 +1,4 @@
-.PHONY: help start reset-db
+.PHONY: help start reset-db fresh-start
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -9,3 +9,5 @@ start: ## Start dev server
 reset-db: ## Reset database (drop volume + recreate)
 	docker compose down -v postgres
 	docker compose up -d postgres
+
+fresh-start: reset-db start ## Reset DB then start dev server
