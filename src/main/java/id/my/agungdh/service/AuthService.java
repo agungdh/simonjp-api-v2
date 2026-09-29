@@ -5,13 +5,14 @@ import id.my.agungdh.entity.User;
 import id.my.agungdh.repository.SessionRepository;
 import id.my.agungdh.repository.UserRepository;
 import id.my.agungdh.util.PasswordHasher;
+import id.my.agungdh.util.TokenHasher;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,8 +30,11 @@ public class AuthService {
     @Inject
     PasswordHasher passwordHasher;
 
+    @Inject
+    TokenHasher tokenHasher;
+
     @Transactional
-    public String login(String username, String password, String ipAddress, String userAgent) {
+    public String login(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new WebApplicationException("Username atau password salah", Response.Status.UNAUTHORIZED));
 
@@ -39,25 +43,29 @@ public class AuthService {
         }
 
         String token = generateToken();
-        String tokenHash = passwordHasher.hash(token);
+        String tokenHash = tokenHasher.hash(token);
 
         Session session = new Session();
-        session.tokenHash = tokenHash;
+        session.token = tokenHash;
         session.userId = user.id;
-        session.ipAddress = ipAddress;
-        session.userAgent = userAgent;
-        session.expiresAt = LocalDateTime.now().plusDays(SESSION_DURATION_DAYS);
+        session.expiresAt = OffsetDateTime.now().plusDays(SESSION_DURATION_DAYS);
         sessionRepository.persist(session);
 
         return token;
     }
 
     public Optional<User> validateSession(String token) {
-        String tokenHash = passwordHasher.hash(token);
+        String tokenHash = tokenHasher.hash(token);
 
-        return sessionRepository.findByTokenHash(tokenHash)
-                .filter(session -> session.expiresAt.isAfter(LocalDateTime.now()))
+        return sessionRepository.findByToken(tokenHash)
+                .filter(session -> session.expiresAt.isAfter(OffsetDateTime.now()))
                 .map(session -> userRepository.findById(session.userId));
+    }
+
+    @Transactional
+    public void logout(String token) {
+        String tokenHash = tokenHasher.hash(token);
+        sessionRepository.deleteByToken(tokenHash);
     }
 
     private String generateToken() {

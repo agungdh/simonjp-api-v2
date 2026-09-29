@@ -26,17 +26,8 @@ public class AuthResource {
     @POST
     @Path("/login")
     @Operation(summary = "Login with username and password")
-    public Response login(@Valid AuthRequest request, @Context UriInfo uriInfo, @Context HttpHeaders headers) {
-        String ipAddress = headers.getHeaderString("X-Forwarded-For");
-        if (ipAddress == null || ipAddress.isBlank()) {
-            ipAddress = headers.getHeaderString("X-Real-IP");
-        }
-        if (ipAddress == null || ipAddress.isBlank()) {
-            ipAddress = uriInfo.getRequestUri().getHost();
-        }
-        String userAgent = headers.getHeaderString("User-Agent");
-
-        String token = authService.login(request.username(), request.password(), ipAddress, userAgent);
+    public Response login(@Valid AuthRequest request) {
+        String token = authService.login(request.username(), request.password());
 
         NewCookie cookie = new NewCookie.Builder(SESSION_COOKIE_NAME)
                 .value(token)
@@ -48,5 +39,22 @@ public class AuthResource {
                 .build();
 
         return Response.ok().cookie(cookie).build();
+    }
+
+    @POST
+    @Path("/logout")
+    @Operation(summary = "Logout and invalidate session")
+    public Response logout(@CookieParam(SESSION_COOKIE_NAME) String sessionToken) {
+        if (sessionToken != null) {
+            authService.logout(sessionToken);
+        }
+
+        NewCookie cookie = new NewCookie.Builder(SESSION_COOKIE_NAME)
+                .value("")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        return Response.noContent().cookie(cookie).build();
     }
 }

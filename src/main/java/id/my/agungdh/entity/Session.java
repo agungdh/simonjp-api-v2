@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -17,26 +17,15 @@ public class Session extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @Column(name = "token_hash", nullable = false, length = 64, unique = true)
-    public String tokenHash;
+    @Column(nullable = false, length = 64)
+    public String token;
 
     @Column(name = "user_id", nullable = false)
     public Long userId;
 
-    @Column(name = "ip_address", length = 45)
-    public String ipAddress;
-
-    @Column(name = "user_agent", length = 500)
-    public String userAgent;
-
     @Column(name = "expires_at", nullable = false)
-    public LocalDateTime expiresAt;
+    public OffsetDateTime expiresAt;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    public LocalDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-    }
+    public OffsetDateTime createdAt;
 }

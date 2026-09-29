@@ -9,7 +9,11 @@ import java.util.Optional;
 @ApplicationScoped
 public class SessionRepository implements PanacheRepositoryBase<Session, Long> {
 
-    public Optional<Session> findByTokenHash(String tokenHash) {
-        return find("tokenHash", tokenHash).firstResultOptional();
+    public Optional<Session> findByToken(String token) {
+        return find("token", token).firstResultOptional();
+    }
+
+    public void deleteByToken(String token) {
+        delete("token", token);
     }
 }
