@@ -5,6 +5,7 @@ import id.my.agungdh.entity.Pegawai;
 import id.my.agungdh.entity.User;
 import id.my.agungdh.repository.PegawaiRepository;
 import id.my.agungdh.repository.UserRepository;
+import id.my.agungdh.util.PasswordHasher;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,9 @@ public class PegawaiService {
     @Inject
     UserRepository userRepository;
 
+    @Inject
+    PasswordHasher passwordHasher;
+
     public List<Pegawai> listAll() {
         return repository.findAll().list();
     }
@@ -37,7 +41,7 @@ public class PegawaiService {
         User user = new User();
         user.pegawaiId = pegawai.id;
         user.username = pegawai.nip;
-        user.password = request.password();
+        user.password = passwordHasher.hash(request.password());
         userRepository.persist(user);
         return pegawai;
     }
@@ -52,7 +56,7 @@ public class PegawaiService {
         User user = userRepository.findByPegawaiId(existing.id)
                 .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
         user.username = pegawai.nip;
-        user.password = request.password();
+        user.password = passwordHasher.hash(request.password());
         return existing;
     }
 
