@@ -1,4 +1,4 @@
-package id.my.agungdh.resource;
+package id.my.agungdh.exception;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
