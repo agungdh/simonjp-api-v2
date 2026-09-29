@@ -35,6 +35,7 @@ public class PegawaiService {
     public Pegawai create(Pegawai pegawai, PegawaiRequest request) {
         repository.persist(pegawai);
         User user = new User();
+        user.pegawaiId = pegawai.id;
         user.username = pegawai.nip;
         user.password = request.password();
         userRepository.persist(user);
@@ -48,8 +49,9 @@ public class PegawaiService {
         existing.nip = pegawai.nip;
         existing.nama = pegawai.nama;
         existing.jabatan = pegawai.jabatan;
-        User user = userRepository.findByUsername(existing.nip)
+        User user = userRepository.findByPegawaiId(existing.id)
                 .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
+        user.username = pegawai.nip;
         user.password = request.password();
         return existing;
     }
@@ -59,7 +61,7 @@ public class PegawaiService {
         Pegawai pegawai = repository.findByUuid(uuid)
                 .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
         pegawai.deletedAt = OffsetDateTime.now();
-        User user = userRepository.findByUsername(pegawai.nip)
+        User user = userRepository.findByPegawaiId(pegawai.id)
                 .orElseThrow(() -> new jakarta.ws.rs.NotFoundException());
         user.deletedAt = OffsetDateTime.now();
     }

@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 public class User extends BaseEntity {
 
+    @Column(name = "pegawai_id", nullable = false)
+    public Long pegawaiId;
+
     @Column(nullable = false, length = 20)
     public String username;
 

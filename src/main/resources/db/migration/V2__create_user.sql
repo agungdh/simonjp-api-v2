@@ -1,19 +1,18 @@
-CREATE UNIQUE INDEX idx_pegawai_nip_full ON pegawais (nip);
-
 CREATE TABLE users (
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    uuid       UUID         NOT NULL DEFAULT gen_random_uuid(),
-    username   VARCHAR(20)  NOT NULL,
-    password   VARCHAR(255) NULL,
-    created_at TIMESTAMPTZ  NULL,
-    created_by BIGINT       NULL,
-    updated_at TIMESTAMPTZ  NULL,
-    updated_by BIGINT       NULL,
-    deleted_at TIMESTAMPTZ  NULL,
-    deleted_by BIGINT       NULL,
+    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    uuid        UUID         NOT NULL DEFAULT gen_random_uuid(),
+    pegawai_id  BIGINT       NOT NULL,
+    username    VARCHAR(20)  NOT NULL,
+    password    VARCHAR(255) NULL,
+    created_at  TIMESTAMPTZ  NULL,
+    created_by  BIGINT       NULL,
+    updated_at  TIMESTAMPTZ  NULL,
+    updated_by  BIGINT       NULL,
+    deleted_at  TIMESTAMPTZ  NULL,
+    deleted_by  BIGINT       NULL,
 
-    CONSTRAINT fk_user_username FOREIGN KEY (username)
-        REFERENCES pegawais (nip)
+    CONSTRAINT fk_users_pegawai_id FOREIGN KEY (pegawai_id)
+        REFERENCES pegawais (id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 );

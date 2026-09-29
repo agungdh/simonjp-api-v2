@@ -13,7 +13,7 @@ public class UserRepository implements PanacheRepositoryBase<User, Long> {
         return find("uuid", uuid).firstResultOptional();
     }
 
-    public Optional<User> findByUsername(String username) {
-        return find("username = ?1", username).firstResultOptional();
+    public Optional<User> findByPegawaiId(Long pegawaiId) {
+        return find("pegawaiId = ?1", pegawaiId).firstResultOptional();
     }
 }
