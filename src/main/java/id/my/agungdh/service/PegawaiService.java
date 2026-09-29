@@ -3,6 +3,7 @@ package id.my.agungdh.service;
 import id.my.agungdh.dto.PegawaiRequest;
 import id.my.agungdh.entity.Pegawai;
 import id.my.agungdh.entity.User;
+import id.my.agungdh.config.SoftDelete;
 import id.my.agungdh.repository.PegawaiRepository;
 import id.my.agungdh.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@SoftDelete
 @ApplicationScoped
 public class PegawaiService {
 
@@ -23,8 +25,17 @@ public class PegawaiService {
     @Inject
     UserRepository userRepository;
 
-    public List<Pegawai> listAll() {
-        return repository.find("deletedAt IS NULL").list();
+    public List<Pegawai> listAll(boolean includeDeleted) {
+        if (includeDeleted) {
+            repository.disableDeletedFilter();
+        }
+        try {
+            return repository.findAll().list();
+        } finally {
+            if (includeDeleted) {
+                repository.enableDeletedFilter();
+            }
+        }
     }
 
     public Optional<Pegawai> findByUuid(UUID uuid) {

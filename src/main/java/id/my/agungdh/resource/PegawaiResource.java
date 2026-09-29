@@ -33,8 +33,8 @@ public class PegawaiResource {
 
     @GET
     @Operation(summary = "List all pegawai")
-    public List<PegawaiResponse> list() {
-        return service.listAll().stream()
+    public List<PegawaiResponse> list(@QueryParam("includeDeleted") @DefaultValue("false") boolean includeDeleted) {
+        return service.listAll(includeDeleted).stream()
                 .map(mapper::toResponse)
                 .toList();
     }

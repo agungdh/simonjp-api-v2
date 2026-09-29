@@ -28,7 +28,7 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
         }
 
         Long count = (Long) entityManager.createQuery(
-                "SELECT COUNT(*) FROM " + entity + " e WHERE e." + field + " = :value AND e.deletedAt IS NULL"
+                "SELECT COUNT(*) FROM " + entity + " e WHERE e." + field + " = :value"
         ).setParameter("value", value).getSingleResult();
 
         return count == 0;
