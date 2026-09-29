@@ -14,7 +14,7 @@ quarkus:
     username: admin
     password: admin
     jdbc:
-      url: jdbc:postgresql://localhost:5432/crud
+      url: jdbc:postgresql://localhost:5432/simonjp
 
   # Hibernate ORM
   hibernate-orm:

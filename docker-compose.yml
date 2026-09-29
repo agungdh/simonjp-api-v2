@@ -5,13 +5,13 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: crud
+      POSTGRES_DB: simonjp
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d crud"]
+      test: ["CMD-SHELL", "pg_isready -U admin -d simonjp"]
       interval: 10s
       timeout: 5s
       retries: 5

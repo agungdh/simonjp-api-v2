@@ -1,6 +1,6 @@
 CREATE UNIQUE INDEX idx_pegawai_nip_full ON pegawai (nip);
 
-CREATE TABLE "user" (
+CREATE TABLE users (
     id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     uuid       UUID         NOT NULL DEFAULT gen_random_uuid(),
     username   VARCHAR(20)  NOT NULL,
@@ -18,8 +18,8 @@ CREATE TABLE "user" (
         ON DELETE RESTRICT
 );
 
-CREATE INDEX idx_user_uuid_hash ON "user" USING hash (uuid);
+CREATE INDEX idx_user_uuid_hash ON users USING hash (uuid);
 
-CREATE INDEX idx_user_username ON "user" (username);
+CREATE INDEX idx_user_username ON users (username);
 
-CREATE UNIQUE INDEX idx_user_username_unique ON "user" (username) WHERE deleted_at IS NULL;
+CREATE UNIQUE INDEX idx_user_username_unique ON users (username) WHERE deleted_at IS NULL;
